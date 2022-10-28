@@ -9,18 +9,17 @@ import pytest
 from fastapi.testclient import TestClient
 
 
-@pytest.fixture()
+
+@pytest.fixture(scope="class")
 def test_client(monkeypatch):
     monkeypatch.setattr("repository_service_tuf_api.sync_redis", lambda: None)
 
-    from app import rstuf_app
-
-    client = TestClient(rstuf_app)
-
-    return client
+    import app
+    with TestClient(app.rstuf_app) as client:
+        yield client
 
 
-@pytest.fixture()
+@pytest.fixture
 def token_headers(test_client):
     token_url = "/api/v1/token/?expires=1"
     token_payload = {

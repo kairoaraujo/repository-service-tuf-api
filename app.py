@@ -14,6 +14,7 @@ from repository_service_tuf_api.api.targets import router as targets_v1
 from repository_service_tuf_api.api.tasks import router as tasks_v1
 from repository_service_tuf_api.api.token import router as token_v1
 
+
 rstuf_app = FastAPI(
     title="Repository Service for TUF API",
     description="Repository Service for TUF Rest API",
@@ -25,10 +26,13 @@ api_v1 = APIRouter(
     tags=["v1"],
     responses={404: {"description": "Not found"}},
 )
-
+breakpoint()
 if settings.get("BOOTSTRAP_NODE", False) is True:
     api_v1.include_router(bootstrap_v1)
-logging.info(f"Bootstrap on this node enabled: {settings.BOOTSTRAP_NODE}")
+
+logging.info(
+    f"Bootstrap on this node enabled: {settings.get('BOOTSTRAP_NODE', False)}"
+)
 logging.info(f"Bootstrap ID: {settings_repository.get_fresh('BOOTSTRAP')}")
 
 api_v1.include_router(config_v1)
