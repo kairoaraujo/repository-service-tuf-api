@@ -34,11 +34,7 @@ services:
     tty: true
 
   repository-service-tuf-worker:
-    image: ghcr.io/vmware/repository-service-tuf-worker:dev
-    # Developers: For local build repository-service-tuf-worker, uncomment the line below
-    #   On repository-service-tuf-worker, run make build-dev
-    #
-    # image: repository-service-tuf-worker:dev
+    image:    repository-service-tuf-worker:dev
     volumes:
       - repository-service-tuf-worker-data:/data
       - repository-service-tuf-storage:/var/opt/repository-service-tuf/storage

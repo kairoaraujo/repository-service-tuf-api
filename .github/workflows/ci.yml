@@ -20,6 +20,14 @@ jobs:
       with:
         python-version: ${{ matrix.python-versions }}
 
+    - name: Check if any local images is used in docker-compose.yml
+      run: |
+        egrep -w 'image:\s+repository-service-tuf-api|image:\s+repository-service-tuf-worker' docker-compose.yml
+        if [[ $rc -eq "0" ]]; then \
+          echo "Local image has been used in docker-compose.yml" \
+          exit 1 \
+        fi
+
     - name: Install tox and coverage
       run: pip install tox tox-gh-actions
 
