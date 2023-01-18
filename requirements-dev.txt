@@ -75,7 +75,7 @@ amqp==5.1.1 ; python_version >= '3.6'
 anyio==3.6.2 ; python_full_version >= '3.6.2'
 async-timeout==4.0.2 ; python_version >= '3.6'
 bcrypt==4.0.1
-billiard==3.6.4.0
+billiard==4.1.0
 celery==5.2.7
 click-didyoumean==0.3.0 ; python_full_version >= '3.6.2' and python_full_version < '4.0.0'
 click-plugins==1.1.1
