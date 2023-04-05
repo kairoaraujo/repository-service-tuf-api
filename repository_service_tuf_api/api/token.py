@@ -2,9 +2,17 @@
 #
 # SPDX-License-Identifier: MIT
 
+import logging
 from fastapi import APIRouter, Depends, Security
 
-from repository_service_tuf_api import SCOPES_NAMES, token
+from repository_service_tuf_api import SCOPES_NAMES, token, settings
+
+if settings.get("AUTH", True) is True:
+    logging.debug("RSTUF build in auth is enabled")
+    auth =  token.validate_token
+else:
+    logging.debug("RSTUF build in auth is disabled")
+    auth = None
 
 router = APIRouter(
     prefix="/token",
@@ -26,7 +34,7 @@ router = APIRouter(
 def get(
     params: token.GetParameters = Depends(),
     _user=Security(
-        token.validate_token, scopes=[SCOPES_NAMES.read_token.value]
+        auth, scopes=[SCOPES_NAMES.read_token.value]
     ),
 ):
     return token.get(params)
@@ -57,7 +65,7 @@ def post(
 def post_token(
     payload: token.TokenRequestPayload,
     user=Security(
-        token.validate_token, scopes=[SCOPES_NAMES.write_token.value]
+        auth, scopes=[SCOPES_NAMES.write_token.value]
     ),
 ):
     return token.post_new(payload=payload, user=user)

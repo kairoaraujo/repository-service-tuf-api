@@ -30,8 +30,7 @@ Some required services:
 docker run -p 80:80 \
     --env="RSTUF_BROKER_SERVER=amqp://guest:guest@rabbitmq:5672" \
     --env="RSTUF_REDIS_SERVER=redis://redis" \
-    --env="SECRETS_RSTUF_TOKEN_KEY=secret" \
-    --env="SECRETS_RSTUF_ADMIN_PASSWORD=password" \
+    --env="RSTUF_AUTH=false \
     ghcr.io/vmware/repository-service-tuf-api:latest
 ```
 
@@ -87,11 +86,18 @@ These settings are shared with the repository workers
 
 Important: It should use the same db id as used by RSTUF Workers.
 
-#### (Required) `SECRETS_RSTUF_TOKEN_KEY`
+#### (Required) `RSTUF_AUTH`
+
+Disable/Enable RSTUF built-in token authentication. Default: true
+
+Note: This feature is recommended to be disabled. It will disabled by default
+in the future.
+
+##### (Required) `SECRETS_RSTUF_TOKEN_KEY`
 
 Secret Token for hash the Tokens.
 
-#### (Required) `SECRETS_RSTUF_ADMIN_PASSWORD`
+##### (Required) `SECRETS_RSTUF_ADMIN_PASSWORD`
 
 Secret admin password.
 

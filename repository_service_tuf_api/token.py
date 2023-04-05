@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
+import logging
 from datetime import datetime, timedelta
 from typing import List, Literal, Optional
 from uuid import uuid4
@@ -12,7 +13,13 @@ from fastapi.security import OAuth2PasswordBearer, SecurityScopes
 from jose import JWTError, jwt
 from pydantic import BaseModel, Field, SecretStr, ValidationError
 
-from repository_service_tuf_api import SCOPES, SCOPES_NAMES, SECRET_KEY, db
+from repository_service_tuf_api import (
+    SCOPES,
+    SCOPES_NAMES,
+    SECRET_KEY,
+    db,
+    settings,
+)
 from repository_service_tuf_api.users.crud import bcrypt, get_user_by_username
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/token", scopes=SCOPES)
@@ -116,7 +123,6 @@ def _decode_token(token):
 
 
 def create_access_token(data: dict, expires_delta: int = 1):
-
     to_encode = data.copy()
     expires = datetime.utcnow() + timedelta(hours=expires_delta)
 
@@ -152,6 +158,15 @@ def validate_token(
         )
 
     return user_token
+
+
+def auth():
+    if settings.get("AUTH", True) is True:
+        logging.debug("RSTUF build in auth is enabled")
+        return validate_token()
+    else:
+        logging.debug("RSTUF build in auth is disabled")
+        return None
 
 
 def post(token_data):
